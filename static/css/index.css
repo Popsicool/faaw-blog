@@ -424,6 +424,7 @@ footer{
     .footer-inner{
         display: grid;
         place-items: center;
+        padding-bottom: 7%;
     }
     .footer-Icons{
         order: 2;
