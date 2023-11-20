@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ blog.title }} | FAAW-BLOG
+{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/read.css' %}">
+{% endblock %}
+
+{% block hero %}
+<div class="started">
+    <div class="started-inner">
+        <h2 class="diary">How my Journey began</h2>
+        <p class="aspirations">In the heart of a city pulsating with creativity, my fashion journey unfolded like a carefully curated runway show, each chapter revealing a new design, a fresh perspective, and the evolution of my passion for style. It all began with a fascination for fabrics and colors, a love affair with the way garments draped and whispered stories through their stitches. As a wide-eyed dreamer, I sketched my first designs on the back of old notebooks, capturing the essence of my imagination with every stroke of the pencil. The initial steps were timid, as I ventured into the world of fashion, armed with determination and a keen eye for detail. Fashion school became my sanctuary, a place where my raw creativity was refined into a skill set that laid the foundation for my sartorial aspirations.</p>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block main %}
+<div class="read-main" id="read-main">
+    <h1 class= "blog-title">{{ blog.title }}</h1>
+    <div class="blog-img-wrap">
+        <img src="{{ blog.picture.url }}" alt="{{blog.title}}">
+    </div>
+
+    <p class="blog-body">{{ blog.body|linebreaksbr }}</p>
+
+    <div class="comments">
+        {% if comments %}
+        <div class="last-comment" id = "last-comment">
+            <p class="comment-author">{{ last.author|title }}</p>
+            <p class="comment-text">{{ last.text|linebreaksbr }}</p>
+            <p class="comment-time">{{ last.created_at|timesince }} ago  <i class="arrow down" id="down-arrow"></i></p>
+        </div>
+        <div class="allComments" id="all-comment">
+            {% for comment in comments %}
+            <div class="all-comment">
+                <p class="comment-author">{{ comment.author|title }}</p>
+                <p class="comment-text">{{ comment.text|linebreaksbr }}</p>
+                <p class="comment-time">{{ comment.created_at|timesince }} ago</p>
+            </div>
+            {% endfor %}
+            <p><i class="arrow up" id="up-arrow"></i></p>
+        </div>
+        {% else %}
+        <div class="last-comment">
+            <p class="comment-text"><em>No comments yet, be the first!</em></p>
+        </div>
+
+        {% endif %}
+    </div>
+
+
+    <div class="com-box">
+        <form method="post" id="com-form">
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            <div id="com-msg">
+
+            </div>
+            <input type="text" name="name" class="name-inp" placeholder="Name" id="author"><br>
+            <textarea name="comment" id="" cols="30" rows="10" id="text" placeholder="Write a comment........" class="text-inp"></textarea>
+            <div class="sub-btn-wrap">
+                <button class="com-sub">Submit</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Scroll to the "show" div
+            var showDiv = document.getElementById("read-main");
+
+            if (showDiv) {
+                showDiv.scrollIntoView();
+                event.preventDefault();
+            }
+        });
+    </script>
+    <!-- <script>
+        $(document).on("submit", "#com-form", function (e) {
+            e.preventDefault();
+            let loader = '<div class="loader"></div>'
+            $("#com-msg").append(loader);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'comment' blog.slug %}",
+                data:{
+                    name:$("#author").val(),
+                    comment:$("#text").val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (response) {
+                    $("#com-msg").empty();
+                    if (response.status){
+                        for (var comment in response.comments){
+                            var temp = `
+                            <div class="all-comment">
+                                <p class="comment-author">{{ comment.author|title }}</p>
+                                <p class="comment-text">{{ comment.text|linebreaksbr }}</p>
+                                <p class="comment-time">{{ comment.created_at|timesince }} ago</p>
+                            </div>`
+                        }
+                        var temp = "<p class='success'> Thank you for subscribing! </p>";
+                    }
+                    else{
+                        var temp = `<p class='error'>${ response.message }</p>`;
+                    }
+                    $("#com-msg").append(temp);
+                },
+                error: function(xhr, status, error){
+                    $("#com-msg").empty();
+                    var temp = "<p class='error'>Something went wrong, please retry later</p>";
+                    $("#com-msg").append(temp);
+                }
+            });
+        });
+    </script> -->
+
+{% endblock %}

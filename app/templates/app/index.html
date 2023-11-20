@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    HOME | FAAW-BLOG
+{% endblock %}
+
+{% block hero %}
+<div class="hero hero22">
+    <div class="hero-left">
+        <div class="hero-Content">
+            <h3 class=diary>DIARY OF A BROKE ENTREPRENEUR</h3>
+            <p class="broke">Fibafunjah is a tailor/fashion designer with close to a decade of tailoring experience specifically in male garment construction. Tailoring has become second nature to me as I live and breathe the craft. Learning to make the craft a business that can become self sustaining, however, is the challenge I wake up to everyday. Defining growth, understanding markets, learning to adjust as the tides change has been the hallmark of nearly a decade of tailoring business for me.</p>
+            <p class="broke broke2">Subscribe to follow on my challenging journey.</p>
+            <button class="series-btn">SERIES</button>
+        </div>
+
+    </div>
+    <div class="hero-right">
+        <img src="{% static 'img/fiba.png' %}" alt="fiba">
+    </div>
+</div>
+{% endblock %}
+{% block main %}
+    <div class="blog">
+        <div class="blog-top">
+            <h3 class="the-blog">The Blog</h3>
+            <hr class="blog-line">
+        </div>
+        <div class="blog-cards-cont">
+            {% for blog in posts %}
+            <div class="blog-card">
+                <div class="card-top">
+                    <h4 class="tour">{{ blog.title }}</h4>
+                    <p class="tText">{{ blog.body|truncatechars:82 }}</p>
+                </div>
+                <div class="card-bottom" style="background-image: url('{{ blog.picture.url }}');">
+                    <a href="{% url 'read' blog.slug %}" class="read-more"><button class="bb">read more</button></a>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <div class="subOuter" id="subscribe-sec">
+        <div class="subInner">
+            <h2 class="subsub">Subscribe</h2>
+            <p class="signup">Sign up to our Newsletter</p>
+            <form class="subForm" id="post-form">
+                {% csrf_token %}
+                <input type="email" placeholder="Enter email" required class="subInput" id="email">
+                <div id="display">
+    
+                </div>
+                <button class="submitBtn">Submit</button>
+            </form>
+
+        </div>
+    </div>
+    {% block scripts %}
+    <script>
+        $(document).on("submit", "#post-form", function (e) {
+            e.preventDefault();
+            let loader = '<div class="loader"></div>'
+            $("#display").append(loader);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'subscribe' %}",
+                data:{
+                    email:$("#email").val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (response) {
+                    $("#display").empty();
+                    if (response.status){
+                        var temp = "<p class='success'> Thank you for subscribing! </p>";
+                    }
+                    else{
+                        var temp = `<p class='error'>${ response.message }</p>`;
+                    }
+					$("#display").append(temp);
+                },
+                error: function(xhr, status, error){
+                    $("#display").empty();
+                    var temp = "<p class='error'>Something went wrong, please retry later</p>";
+                    $("#display").append(temp);
+                }
+            });
+        });
+    </script>
+
+    {% endblock %}
+    
+{% endblock %}

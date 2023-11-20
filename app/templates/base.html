@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" />
+    
+    {% block links %}
+
+    {% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="hero-main">
+        <div class="topLeft">
+            <ul>
+                <li>
+                    <a href="https://wa.me/message/OTU3J7OQR5Q5M1" target="_blank" rel="noopener noreferrer">
+                        <div class="socIcon">
+                            <img src="{% static 'img/fb.png' %}" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.instagram.com/houseoffaaw">
+                        <div class="socIcon">
+                            <img src="{% static 'img/ig.png' %}" alt="">
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.twitter.com/houseoffaaw" target="_blank" rel="noopener noreferrer">
+                        <div class="socIcon">
+                            <img src="{% static 'img/tw.png' %}" alt="">
+                        </div>
+                    </a>
+                </li>
+            </ul>
+    
+        </div>
+    
+        <div class="topRight">
+            <nav>
+                <div class="nav-left">
+                    <div class="logText">
+                        <div class="logo-wrap"><img src="{% static 'img/faaw.png' %}" alt="faaw"></div>
+                        <p class="hof">House of Faaw</p>
+                    </div>
+        
+                </div>
+                <div class="nav-right">
+        
+                    <div class="link">
+                        <ul class="link-ul link-ul2" id="link-ul">
+                            <li>
+                                <a href="{% url 'index' %}" class="anchor anchor2 active-page">HOME</a>
+                            </li>
+                            <li>
+                                <a href="#" class="anchor anchor2">BLOGS</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'index' %}#subscribe-sec" class="anchor anchor2 sub-hid">SUBSCRIBE</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'index' %}#subscribe-sec" class="anchor anchor2"><button class="sub-btn">SUBSCRIBE</button></a>
+                            </li>
+                        </ul>
+                    </div>
+        
+                </div>
+                <div class="hambugger-wrapper" id="hambugger-wrapper">
+                    <img src="{% static 'img/open.png' %}" alt="hambugger" id="bg">
+                </div>
+        
+            </nav>
+            {% block hero %}
+
+            {% endblock %}
+    
+        </div>
+    </div>
+
+    {% block main %}
+
+    {% endblock %}
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-Icons">
+                <ul>
+                    <li>
+                        <a href="https://wa.me/message/OTU3J7OQR5Q5M1" target="_blank" rel="noopener noreferrer">
+                            <div class="socIcon">
+                                <img src="{% static 'img/fb2.png' %}" alt="">
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/houseoffaaw">
+                            <div class="socIcon">
+                                <img src="{% static 'img/ig2.png' %}" alt="">
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.twitter.com/houseoffaaw" target="_blank" rel="noopener noreferrer">
+                            <div class="socIcon">
+                                <img src="{% static 'img/tw2.png' %}" alt="">
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="footer-link">
+                <ul class="footer-link-ul">
+                    <li>
+                        <a href="{% url 'index' %}" class="anchor">HOME</a>
+                    </li>
+                    <li>
+                        <a href="#" class="anchor">BLOGS</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'index' %}#subscribe-sec" class="anchor">SUBSCRIBE</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </footer>
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block scripts %}
+
+    {% endblock %}
+    
+</body>
+</html>

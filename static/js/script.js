@@ -14,3 +14,17 @@ function toggle () {
 
 }
 menu.addEventListener("click", toggle)
+
+let arrow = document.getElementById('down-arrow')
+function offLast(){
+    document.getElementById('last-comment').style.display = "none"
+    document.getElementById('all-comment').style.display = "block"
+}
+arrow.addEventListener('click', offLast)
+
+let arrow2 = document.getElementById('up-arrow')
+function offAll(){
+    document.getElementById('last-comment').style.display = "block"
+    document.getElementById('all-comment').style.display = "none"
+}
+arrow2.addEventListener('click', offAll)
