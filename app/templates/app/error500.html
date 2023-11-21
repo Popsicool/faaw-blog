@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    404 | FAAW-BLOG
+{% endblock %}
+
+{% block hero %}
+<div class="hero hero22">
+    <div class="hero-left">
+        <div class="hero-Content">
+            <h3 class=diary>There was an internal server error.</h3>
+            <p class="broke">We will fix it soon, please check back latter</p>
+            <a href="{% url 'index' %}"><button class="series-btn">go back!</button></a>
+        </div>
+
+    </div>
+    <div class="hero-right">
+        <img src="{% static 'img/ops.png' %}" alt="fiba">
+    </div>
+</div>
+{% endblock %}

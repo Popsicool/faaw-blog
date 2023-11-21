@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from .models import Subscriber
 import re
+from django.template.defaultfilters import truncatechars
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 def is_valid_email(email):
@@ -16,6 +18,11 @@ def index(request):
     context = {"posts": latest_posts}
     return render(request, "app/index.html", context)
 
+def custom_page_not_found(request, exception):
+    return render(request, 'app/error404.html', status=404)
+
+def custom_server_error(request):
+    return render(request, 'app/error500.html', status=500)
 def blog(request, slug):
     post = get_object_or_404(Blog, slug=slug)
     comments = post.comments.order_by('-created_at')
@@ -45,6 +52,36 @@ def comment(request, slug):
         comments = post.comments.order_by('-created_at')
         return JsonResponse({"status":True, "comments": comments})
     return redirect(reverse('index'))
+
+def load_more_posts(request):
+    blog_posts = Blog.objects.all()
+    posts_per_page = 6
+    paginator = Paginator(blog_posts, posts_per_page)
+    page = request.GET.get('page')
+    try:
+        page = int(page)
+        if page < 1:
+            page = paginator.num_pages
+    except BaseException:
+        pass
+    try:
+        blog_posts_page = paginator.page(page)
+    except PageNotAnInteger:
+        blog_posts_page = paginator.page(1)
+        page = 1
+    except EmptyPage:
+        blog_posts_page = paginator.page(paginator.num_pages)
+        page = paginator.num_pages
+    truncated_posts = []
+    for post in blog_posts_page:
+        truncated_post = {
+            'title': post.title,
+            'body': truncatechars(post.body, 82),
+            'picture': post.picture.url,
+            'slug': post.slug,
+        }
+        truncated_posts.append(truncated_post)
+    return JsonResponse({"status":True, 'blog_posts_page': truncated_posts, 'page':page})
 
 def subscribe(request):
     if request.method == "POST":

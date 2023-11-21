@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    404 | FAAW-BLOG
+{% endblock %}
+
+{% block hero %}
+<div class="hero hero22">
+    <div class="hero-left">
+        <div class="hero-Content">
+            <h3 class=diary>oops! Nothing here</h3>
+            <p class="broke">We can`t seem to find the page you`er looking for. Try going back to the pervious page.</p>
+            <a href="{% url 'index' %}"><button class="series-btn">go back!</button></a>
+        </div>
+
+    </div>
+    <div class="hero-right">
+        <img src="{% static 'img/ops.png' %}" alt="fiba">
+    </div>
+</div>
+{% endblock %}

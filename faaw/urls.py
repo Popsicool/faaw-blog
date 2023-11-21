@@ -24,7 +24,8 @@ urlpatterns = [
     path('', include('app.urls')),
 ]
 
-
+handler404 = 'app.views.custom_page_not_found'
+handler500 = 'app.views.custom_server_error'
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

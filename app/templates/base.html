@@ -52,14 +52,13 @@
         
                 </div>
                 <div class="nav-right">
-        
                     <div class="link">
                         <ul class="link-ul link-ul2" id="link-ul">
                             <li>
-                                <a href="{% url 'index' %}" class="anchor anchor2 active-page">HOME</a>
+                                <a href="{% url 'index' %}" class="{% block home_class %}{% endblock %} anchor anchor2">HOME</a>
                             </li>
                             <li>
-                                <a href="#" class="anchor anchor2">BLOGS</a>
+                                <a href="{% url 'index' %}#the-blog" class="{% block blog_class %}{% endblock %} anchor anchor2">BLOGS</a>
                             </li>
                             <li>
                                 <a href="{% url 'index' %}#subscribe-sec" class="anchor anchor2 sub-hid">SUBSCRIBE</a>
@@ -117,10 +116,10 @@
             <div class="footer-link">
                 <ul class="footer-link-ul">
                     <li>
-                        <a href="{% url 'index' %}" class="anchor">HOME</a>
+                        <a href="{% url 'index' %}" class="{% block home_class2 %}{% endblock %} anchor">HOME</a>
                     </li>
                     <li>
-                        <a href="#" class="anchor">BLOGS</a>
+                        <a href="{% url 'index' %}#the-blog" class="{% block blog_class2 %}{% endblock %} anchor">BLOGS</a>
                     </li>
                     <li>
                         <a href="{% url 'index' %}#subscribe-sec" class="anchor">SUBSCRIBE</a>

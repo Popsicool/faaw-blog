@@ -5,6 +5,9 @@
     HOME | FAAW-BLOG
 {% endblock %}
 
+{% block home_class %}active-page{% endblock %}
+{% block home_class2 %}active-page{% endblock %}
+
 {% block hero %}
 <div class="hero hero22">
     <div class="hero-left">
@@ -24,10 +27,10 @@
 {% block main %}
     <div class="blog">
         <div class="blog-top">
-            <h3 class="the-blog">The Blog</h3>
+            <h3 class="the-blog" id="the-blog">The Blog</h3>
             <hr class="blog-line">
         </div>
-        <div class="blog-cards-cont">
+        <div class="blog-cards-cont" id="blog-cards-cont">
             {% for blog in posts %}
             <div class="blog-card">
                 <div class="card-top">
@@ -37,9 +40,12 @@
                 <div class="card-bottom" style="background-image: url('{{ blog.picture.url }}');">
                     <a href="{% url 'read' blog.slug %}" class="read-more"><button class="bb">read more</button></a>
                 </div>
-
             </div>
             {% endfor %}
+        </div>
+        <div class="blog-buttons">
+            <button id="prev-post" class="prvBtn">&#8592;</button>
+            <button id="next-post" class="prvBtn">&#8594;</button>
         </div>
     </div>
 
@@ -60,10 +66,11 @@
         </div>
     </div>
     {% block scripts %}
+
     <script>
         $(document).on("submit", "#post-form", function (e) {
             e.preventDefault();
-            let loader = '<div class="loader"></div>'
+            let loader = '<div class="loading"></div>'
             $("#display").append(loader);
             $.ajax({
                 type: "POST",
@@ -88,6 +95,79 @@
                     $("#display").append(temp);
                 }
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var page = 1;  // Set the initial page number for the next set of posts
+            // Function to load more posts using AJAX
+            function loadMorePosts(a) {
+                let loader = '<div class="loading"></div>'
+                $("#display").append(loader);
+                if (a === '+'){
+                    var loading = page + 1
+                }
+                else{
+                    var loading = page - 1
+                }
+                $.ajax({
+                    url: "{% url 'more' %}",
+                    data: { page: loading },
+                    type: 'GET',
+                    success: function (response) {
+                        $("#display").empty();
+                        if (response) {
+                            $("#blog-cards-cont").empty();
+                            for (var post of response.blog_posts_page){
+                                var temp = `
+                                <div class="blog-card">
+                                    <div class="card-top">
+                                        <h4 class="tour">${post.title}</h4>
+                                        <p class="tText">${post.body}</p>
+                                    </div>
+                                    <div class="card-bottom" style="background-image: url('${post.picture}');">
+                                        <a href="/blog/${post.slug}" class="read-more"><button class="bb">read more</button></a>
+                                    </div>
+                                    
+                                </div>
+                                `;
+                                $('#blog-cards-cont').append(temp);
+                            }
+                            scrollToBlogDiv()
+                            page = response.page;  // Increment the page number for the next AJAX request
+                        }
+                        // else {
+                        //     // No more posts to load
+                        //     $('#loadMoreContainer').html('<p>No more posts to load</p>');
+                        // }
+                    },
+                    error: function () {
+                        $("#display").empty();
+                        console.log('Error loading more posts');
+                    }
+                });
+            }
+            $('#next-post').click(function () {
+                loadMorePosts('+');
+            });
+            $('#prev-post').click(function () {
+                loadMorePosts('-');
+            });
+            function scrollToBlogDiv() {
+                var blogDivOffset = $('#the-blog').offset().top;
+
+                // Animate the scroll to the "blog" div
+                $('html, body').animate({
+                    scrollTop: blogDivOffset
+                }, 1000);  // You can adjust the animation duration as needed
+            }
+    
+            // Load more posts when the user scrolls to the bottom
+            // $(window).scroll(function () {
+            //     if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+            //         loadMorePosts();
+            //     }
+            // });
         });
     </script>
 
