@@ -6,5 +6,6 @@ urlpatterns = [
     path('blog/<slug:slug>', views.blog, name="read"),
     path('subscribe', views.subscribe, name='subscribe'),
     path('more', views.load_more_posts, name='more'),
-    path('comment/<slug:slug>', views.comment, name='comment')
+    path('comment/<slug:slug>', views.comment, name='comment'),
+    path('export-subscribers/', views.export_subscriber_emails, name='export_subscribers'),
 ]

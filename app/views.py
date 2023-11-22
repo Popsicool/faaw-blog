@@ -2,8 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from .models import Blog, Comment
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from .models import Subscriber
+import io
+from openpyxl import Workbook
+
 import re
 from django.template.defaultfilters import truncatechars
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -110,3 +113,30 @@ def get_client_ip(request):
 # def show_client_ip(request):
 #     client_ip = get_client_ip(request)
 #     return HttpResponse(f"Your IP address is {client_ip}")
+
+def export_subscriber_emails(request):
+    # Fetch all subscribers
+    subscribers = Subscriber.objects.all()
+
+    # Create a new Excel workbook and add a worksheet
+    workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.title = 'Subscriber Emails'
+
+    # Add headers to the worksheet
+    headers = ['Email']
+    worksheet.append(headers)
+
+    # Add subscriber emails to the worksheet
+    for subscriber in subscribers:
+        worksheet.append([subscriber.email])
+
+    # Create a response with the Excel file
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=subscriber_emails.xlsx'
+
+    # Save the workbook to the response
+    workbook.save(response)
+
+    # Redirect to the index page
+    return response
